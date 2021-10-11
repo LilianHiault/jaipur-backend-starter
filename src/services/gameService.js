@@ -2,7 +2,7 @@ import * as databaseService from "./databaseService"
 import { shuffle } from "lodash"
 
 // Return a shuffled starting deck except 3 camels
-function initDeck() {
+export function initDeck() {
   const deck = []
   for (let i = 0; i < 6; i++) deck.push("diamonds")
   for (let i = 0; i < 6; i++) deck.push("gold")
@@ -15,7 +15,7 @@ function initDeck() {
 }
 
 // Draw {count} cards of a deck
-function drawCards(deck, count = 1) {
+export function drawCards(deck, count = 1) {
   const cards = []
   for (let i = 0; i < count; i++) {
     cards.push(deck.shift())
@@ -24,7 +24,7 @@ function drawCards(deck, count = 1) {
 }
 
 // Transfer camels from players hand (_players[i].hand) to their herd (_players[i].camelsCount)
-function putCamelsFromHandToHerd(game) {
+export function putCamelsFromHandToHerd(game) {
   game._players.forEach((player) => {
     let camelIndex = player.hand.findIndex((card) => card === "camel")
     while (camelIndex !== -1) {
