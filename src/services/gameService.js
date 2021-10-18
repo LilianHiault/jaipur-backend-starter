@@ -68,3 +68,10 @@ export function createGame(name) {
   databaseService.saveGame(game)
   return game
 }
+
+// Take a good from the market
+export function takeGood(game, playerId, good) {
+  const idGood = game.market.findIndex((card) => card === good)
+  game._players._deck.push(game.market[idGood])
+  game.market.splice(idGood, 1)
+}

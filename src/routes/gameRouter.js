@@ -26,7 +26,7 @@ router.put("/:id/take-good", function (req, res) {
     if (currGame.currentPlayerIndex === req.body.playerIndex) {
       if (currGame._players[req.body.playerIndex].hand.length < 8) {
         gameService.takeGood(
-          req.body.id,
+          currGame,
           req.body.playerIndex,
           req.body.takeGoodPayload
         )
