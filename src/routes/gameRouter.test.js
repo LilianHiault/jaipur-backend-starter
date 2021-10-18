@@ -90,4 +90,10 @@ describe("Game router", () => {
     expect(response.statusCode).toBe(201)
     expect(response.body).toStrictEqual(expectedGame)
   })
+  
+  // test pour le get /games
+  test("should list games", async () => {
+    const rep = await request(app).get("/games").send({ name: "test" })
+    expect(rep.statusCode).toBe(200)
+  })
 })

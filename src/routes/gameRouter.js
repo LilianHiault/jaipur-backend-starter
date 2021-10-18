@@ -14,4 +14,22 @@ router.post("/", function (req, res) {
   }
 })
 
+/ Get /games
+// on ne met que "/games" car on a défini dans index.js que "/" signifie "/games"
+router.get("/", function (req, res) {
+  const listGame = databaseService.getGames()
+  res.status(200).json(listGame)
+})
+/*
+router.get(":id", function (req, res) {
+  const Game = databaseService.getGames()
+  // filter pour trouver le bon id
+  const GameId = Game.filter(game => game.id === :id)
+  if (GameId === null) {
+    res.status(400).json("Game not found")
+  } else {
+    res.status(200).json(GameId)
+  }
+})
+*/
 export default router
