@@ -1,6 +1,8 @@
 import request from "supertest"
 import app from "../app"
 import lodash from "lodash"
+import * as databaseService from "../services/databaseService"
+import fs from "fs"
 
 // Prevent database service to write tests game to filesystem
 jest.mock("fs")
@@ -88,6 +90,58 @@ describe("Game router", () => {
 
     const response = await request(app).post("/games").send({ name: "test" })
     expect(response.statusCode).toBe(201)
+    expect(response.body).toStrictEqual(expectedGame)
+  })
+  test("Take a good from the market", async () => {
+    // Read files
+    fs.readFileSync.mockImplementation(() => {
+      const game = {
+        id: 1,
+        name: "test",
+        market: ["camel", "camel", "camel", "diamonds", "diamonds"],
+        _deck: ["spice", "spice"],
+        _players: [
+          {
+            hand: ["cloth", "cloth", "diamonds", "diamonds", "gold"],
+          },
+          {
+            hand: ["gold", "gold", "gold", "gold", "gold"],
+          },
+        ],
+        currentPlayerIndex: 0,
+      }
+      return JSON.stringify(game)
+    })
+
+    const expectedGame = {
+      id: 1,
+      name: "test",
+      market: ["camel", "camel", "camel", "diamonds", "spice"],
+      _deck: ["spice"],
+      _players: [
+        {
+          hand: ["cloth", "cloth", "diamonds", "diamonds", "gold", "diamonds"],
+        },
+        {
+          hand: ["gold", "gold", "gold", "gold", "gold"],
+          camelsCount: 0,
+          score: 0,
+        },
+      ],
+    }
+
+    // const responseSave = databaseService.saveGame(game)
+    // console.log(responseSave)
+
+    // const games = databaseService.getGames()
+    // const currGame = games.find((game) => game.id === 1)
+    // console.log(currGame)
+
+    const response = await request(app)
+      .put("/games/1/take-good")
+      .send("diamonds")
+
+    expect(response.statusCode).toBe(200)
     expect(response.body).toStrictEqual(expectedGame)
   })
 })
