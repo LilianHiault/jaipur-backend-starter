@@ -77,6 +77,7 @@ router.put("/:id/take-good", function (req, res) {
           req.body.playerIndex,
           req.body.takeGoodPayload
         )
+        req.status(200).send(currGame)
       } else {
         req.status(403).send("The hand's size can't exceed 7 cards")
       }
