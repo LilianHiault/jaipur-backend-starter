@@ -21,8 +21,8 @@ router.put("/:id/take-good", function (req, res) {
     404 if the game id doesn't exist
   */
   const games = databaseService.getGames()
-  const currGame = games.find((game) => game.id === req.body.id)
-  if (currGame) {
+  const currGame = games.find((game) => game.id === req.params.id)
+  if (currGame !== undefined) {
     if (currGame.currentPlayerIndex === req.body.playerIndex) {
       if (currGame._players[req.body.playerIndex].hand.length < 8) {
         gameService.takeGood(
