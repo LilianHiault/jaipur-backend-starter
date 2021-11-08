@@ -67,19 +67,21 @@ router.put("/:id/take-good", function (req, res) {
     403 if he has 7 cards or if it's not his turn
     404 if the game id doesn't exist
   */
+
   const games = databaseService.getGames()
-  const currGame = games.find((game) => game.id === req.params.id)
+  // const games = databaseService.findGamesById()
+  const gameId = Number.parseInt(req.params.id)
+  // filter pour trouver le bon id
+  const currGame = games.find((game) => game.id === gameId)
+
   if (currGame !== undefined) {
-    if (currGame.currentPlayerIndex === req.body.playerIndex) {
-      if (currGame._players[req.body.playerIndex].hand.length < 8) {
-        gameService.takeGood(
-          currGame,
-          req.body.playerIndex,
-          req.body.takeGoodPayload
-        )
-        req.status(200).send(currGame)
+    const playerIndex = Number.parseInt(req.headers.playerindex)
+    if (currGame.currentPlayerIndex === playerIndex) {
+      if (currGame._players[playerIndex].hand.length < 8) {
+        gameService.takeGood(currGame, playerIndex, req.body.good)
+        res.status(200).send(currGame)
       } else {
-        req.status(403).send("The hand's size can't exceed 7 cards")
+        res.status(403).send("The hand's size can't exceed 7 cards")
       }
     } else {
       res.status(403).send("It's not this player's turn")
